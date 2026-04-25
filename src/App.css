@@ -1,0 +1,639 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f4ffff;
+  color: #123;
+  min-height: 100vh;
+}
+
+button {
+  font-family: inherit;
+}
+
+.app {
+  width: 100%;
+  min-height: 100vh;
+  background: #eafafa
+}
+
+.header {
+  width: 100%;
+  min-height: 150px;
+  background: linear-gradient(90deg, #68e8eb, #83c6c6);
+  border-radius: 0 0 12px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(14px, 4vw, 28px);
+  padding: 22px;
+  color: white;
+  text-shadow: 3px 4px 5px #777;
+}
+
+.logoArea {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.logoArea span {
+  font-size: 15px;
+  font-weight: bold;
+}
+
+.logoBox {
+  width: clamp(70px, 18vw, 95px);
+  height: clamp(70px, 18vw, 95px);
+  border: 3px solid white;
+  border-radius: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: clamp(38px, 9vw, 55px);
+  font-weight: bold;
+  background: linear-gradient(#21d5d7, #16aeb8);
+}
+
+.header h1 {
+  font-size: clamp(34px, 9vw, 56px);
+  font-style: italic;
+  margin: 0;
+  line-height: 0.9;
+}
+
+.header h2 {
+  font-size: clamp(20px, 5vw, 30px);
+  font-style: italic;
+  margin: 2px 0 0;
+  color: white;
+}
+
+.screen {
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+
+.card {
+  background: linear-gradient(90deg, #c8fbfa, #ffffff);
+  border: 2px solid #e1e1e1;
+  border-radius: 30px;
+  box-shadow: 6px 6px 0 #d1d1d1;
+}
+
+.formCard {
+  position: relative;
+  width: 100%;
+  padding: 72px clamp(22px, 6vw, 38px) 28px;
+  margin-top: 58px;
+}
+
+.loginCard {
+  min-height: 660px;
+}
+
+.tag {
+  position: absolute;
+  top: -26px;
+  left: 24px;
+  background: #f7ffff;
+  padding: 8px 22px;
+  border: 3px solid #aaa;
+  border-radius: 24px;
+  font-size: clamp(22px, 6vw, 30px);
+  font-weight: bold;
+  font-style: italic;
+  color: #008d96;
+  box-shadow: 4px 4px 0 #bbb;
+}
+
+.formCard h3 {
+  color: #008d96;
+  font-size: clamp(28px, 7vw, 42px);
+  margin: 0 0 28px;
+}
+
+label {
+  display: block;
+  margin-top: 16px;
+  margin-left: 12px;
+  color: #008d96;
+  font-size: clamp(18px, 5vw, 25px);
+  font-weight: bold;
+}
+
+input {
+  width: 100%;
+  height: 56px;
+  border-radius: 32px;
+  border: 1.5px solid #32c5ca;
+  padding: 0 22px;
+  font-size: 18px;
+  outline: none;
+  box-shadow: 4px 4px 0 #d3d3d3;
+  background: white;
+}
+
+input:focus {
+  border: 2px solid #009ea5;
+}
+
+.passwordBox {
+  position: relative;
+}
+
+.passwordBox input {
+  padding-right: 60px;
+}
+
+.passwordBox button {
+  position: absolute;
+  right: 13px;
+  top: 8px;
+  width: 40px;
+  height: 40px;
+  border: none;
+  background: transparent;
+  color: #b8b8b8;
+  cursor: pointer;
+}
+
+.passwordBox svg {
+  width: 28px;
+  height: 28px;
+}
+
+.primaryBtn {
+  width: 82%;
+  min-height: 60px;
+  border: none;
+  border-radius: 35px;
+  background: linear-gradient(90deg, #65dadd, #84b7d2);
+  color: white;
+  font-size: clamp(26px, 7vw, 38px);
+  font-weight: bold;
+  text-transform: uppercase;
+  margin: 34px auto 8px;
+  display: block;
+  box-shadow: 6px 6px 0 #c4c4c4;
+  cursor: pointer;
+}
+
+.primaryBtn:hover {
+  filter: brightness(0.97);
+  transform: translateY(1px);
+}
+
+.linkBtn {
+  background: none;
+  border: none;
+  color: #008ee6;
+  text-decoration: underline;
+  font-size: 18px;
+  font-weight: bold;
+  display: block;
+  margin: 12px auto;
+  cursor: pointer;
+}
+
+.centerText {
+  text-align: center;
+  font-weight: bold;
+  font-size: 20px;
+  margin-top: 32px;
+}
+
+.socials {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.socials button {
+  flex: 1;
+  height: 52px;
+  border-radius: 28px;
+  border: 2px solid #ddd;
+  background: white;
+  font-size: 22px;
+  font-weight: bold;
+  box-shadow: 3px 3px 0 #ddd;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.watermark {
+  margin: 50px auto 40px;
+  width: 160px;
+  height: 160px;
+  border-radius: 35px;
+  background: #7ee4e6;
+  opacity: 0.18;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 120px;
+  color: white;
+}
+
+.erro {
+  color: #d60000;
+  text-align: center;
+  font-weight: bold;
+}
+
+.lgpd {
+  color: #9acaca;
+  text-align: center;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.successCard {
+  margin-top: 80px;
+  padding: 58px 24px;
+  text-align: center;
+}
+
+.successCard h3 {
+  color: #009ea5;
+  font-size: clamp(42px, 10vw, 60px);
+  margin: 16px 0;
+}
+
+.successCard p {
+  color: #009ba3;
+  font-size: 22px;
+}
+
+.homeScreen {
+  padding-bottom: 105px;
+}
+
+.welcomeCard {
+  padding: 34px;
+  margin-bottom: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.welcomeCard h3 {
+  color: #14577a;
+  font-size: clamp(34px, 8vw, 48px);
+  margin: 0;
+}
+
+.welcomeCard p {
+  color: #14577a;
+  font-size: 21px;
+}
+
+.doctor {
+  font-size: clamp(58px, 14vw, 90px);
+  margin-left: 40px;
+  margin-bottom: 20px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 26px;
+}
+
+.menuCard {
+  height: 165px;
+  border-radius: 24px;
+  border: 2px solid #e1e1e1;
+  background: #fff;
+  box-shadow: 5px 5px 0 #d1d1d1;
+  color: #007f86;
+  cursor: pointer;
+}
+
+.menuCard svg {
+  width: 58px;
+  height: 58px;
+  color: #55d1d1;
+}
+
+.menuCard strong {
+  display: block;
+  margin-top: 12px;
+  font-size: clamp(25px, 7vw, 36px);
+}
+
+.bottomNav {
+  position: fixed;
+  bottom: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(430px, 92vw);
+  height: 80px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  z-index: 9999;
+  background: transparent;
+}
+
+.bottomNav button {
+  width: 68px;
+  height: 68px;
+  border-radius: 16px;
+  border: 2px solid #777;
+  background: #e5fbff;
+  box-shadow: 4px 4px 0 #c4c4c4;
+  color: #55d1d1;
+  cursor: pointer;
+}
+
+.bottomNav .activeNav {
+  transform: translateY(-18px);
+  background: #d8fbff;
+}
+
+.bottomNav svg {
+  width: 40px;
+  height: 40px;
+}
+
+@media (max-width: 360px) {
+  .socials {
+    flex-direction: column;
+  }
+
+  .grid {
+    gap: 16px;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  }
+
+  .menuCard {
+    height: 135px;
+  }
+
+  .welcomeCard {
+    padding: 24px;
+  }
+}
+
+.welcomeCard {
+  overflow: hidden;
+  gap: 16px;
+}
+
+.welcomeCard div:first-child {
+  min-width: 0;
+}
+
+.welcomeCard h3 {
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+.doctor {
+  flex-shrink: 0;
+}
+
+.govBtn {
+  font-weight: 900;
+  font-size: 22px;
+  letter-spacing: -0.5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+}
+
+.govBlue {
+  color: #005ca9;
+}
+
+.govYellow {
+  color: #f7c600;
+}
+
+.govGreen {
+  color: #198754;
+}
+
+.googleBtn {
+  color: #4285f4;
+  background: white;
+}
+
+.consultasScreen {
+  padding-bottom: 110px;
+}
+
+.searchInput {
+  width: 100%;
+  margin-bottom: 22px;
+  background: #f6f6f6;
+  box-shadow: none;
+  border: 1px solid #bbb;
+}
+
+.tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 24px;
+  overflow-x: auto;
+}
+
+.tabs button {
+  border: none;
+  padding: 10px 16px;
+  border-radius: 22px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #777;
+  background: #f1f1f1;
+  white-space: nowrap;
+}
+
+.tabs .activeTab {
+  background: #a7eeee;
+  color: #008d96;
+}
+
+.specialtyList {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.specialtyItem {
+  width: 100%;
+  min-height: 82px;
+  border-radius: 34px;
+  border: 3px solid #e2e2e2;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  padding: 12px 22px;
+  box-shadow: 4px 4px 0 #d0d0d0;
+  cursor: pointer;
+}
+
+.specialtyIcon {
+  width: 58px;
+  height: 58px;
+  background: #7fdde0;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30px;
+}
+
+.specialtyItem strong {
+  color: #1795a0;
+  font-size: 24px;
+}
+
+.backBtn {
+  border: none;
+  background: transparent;
+  color: #008d96;
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 14px;
+  cursor: pointer;
+}
+
+.sectionTitle {
+  color: #008d96;
+  font-size: 26px;
+  margin: 10px 0 22px;
+}
+
+.clinicList {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.clinicCard {
+  display: flex;
+  gap: 22px;
+  background: #ffffff;
+  border: 2px solid #dcdcdc;
+  border-radius: 24px;
+  padding: 18px;
+  box-shadow: 5px 5px 0 #d7eeee;
+}
+
+.clinicImage {
+  min-width: 130px;
+  height: 120px;
+  border-radius: 12px;
+  background: #ccf5f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 58px;
+}
+
+.clinicInfo {
+  flex: 1;
+}
+
+.clinicInfo h3 {
+  color: #1595a0;
+  font-size: 28px;
+  margin: 0 0 6px;
+}
+
+.clinicInfo p {
+  margin: 0 0 12px;
+  color: #555;
+}
+
+.clinicDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  color: #555;
+  margin-bottom: 14px;
+}
+
+.clinicInfo button {
+  border: none;
+  border-radius: 24px;
+  background: #55d1d1;
+  color: white;
+  font-weight: bold;
+  font-size: 18px;
+  padding: 12px 22px;
+  box-shadow: 4px 4px 0 #aaa;
+  cursor: pointer;
+}
+
+@media (max-width: 600px) {
+  .clinicCard {
+    flex-direction: column;
+  }
+
+  .clinicImage {
+    width: 100%;
+  }
+}
+
+.appointmentBox {
+  background: white;
+  border-radius: 28px;
+  padding: 28px;
+  box-shadow: 5px 5px 0 #d7eeee;
+  border: 2px solid #e2e2e2;
+}
+
+.appointmentBox h3 {
+  color: #008d96;
+  font-size: 32px;
+  margin: 0 0 18px;
+}
+
+.appointmentBox h4 {
+  color: #008d96;
+  font-size: 24px;
+  margin: 28px 0 14px;
+}
+
+.appointmentBox p {
+  font-size: 18px;
+  color: #345;
+}
+
+.optionGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+  gap: 14px;
+}
+
+.optionGrid button {
+  min-height: 52px;
+  border-radius: 22px;
+  border: 2px solid #9ee7e7;
+  background: #f7ffff;
+  color: #008d96;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.optionGrid .selectedOption {
+  background: #55d1d1;
+  color: white;
+  border-color: #00a6ac;
+  transform: translateY(-3px);
+}

@@ -637,3 +637,82 @@ input:focus {
   border-color: #00a6ac;
   transform: translateY(-3px);
 }
+
+.myAppointmentCard {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  background: white;
+  border: 2px solid #ddd;
+  border-radius: 26px;
+  padding: 22px;
+  box-shadow: 5px 5px 0 #d7eeee;
+}
+
+.appointmentDate {
+  min-width: 95px;
+  min-height: 80px;
+  border-radius: 18px;
+  background: #55d1d1;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.appointmentDate strong {
+  font-size: 24px;
+}
+
+.appointmentDate span {
+  font-weight: bold;
+}
+
+.myAppointmentCard h3 {
+  color: #008d96;
+  font-size: 28px;
+  margin: 0 0 6px;
+}
+
+.myAppointmentCard p {
+  margin: 4px 0;
+  color: #555;
+}
+
+.historyList {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.historyCard {
+  background: #fff;
+  border: 3px solid #e1e1e1;
+  border-radius: 28px;
+  padding: 22px;
+  box-shadow: 5px 5px 0 #d7eeee;
+}
+
+.historyDate {
+  display: inline-block;
+  background: #00a6ac;
+  color: white;
+  font-weight: bold;
+  font-size: 20px;
+  padding: 4px 18px;
+  border-radius: 18px;
+  margin-bottom: 10px;
+}
+
+.historyCard h3 {
+  color: #1595a0;
+  font-size: 26px;
+  margin: 6px 0 12px;
+}
+
+.historyCard p {
+  margin: 6px 0;
+  color: #333;
+  font-size: 17px;
+}

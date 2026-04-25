@@ -11,15 +11,16 @@ import {
   EyeOff,
 } from "lucide-react";
 
-import {FaPhoneAlt } from "react-icons/fa";
+import { FaPhoneAlt } from "react-icons/fa";
 
 function App() {
   const [page, setPage] = useState("login");
   const [user, setUser] = useState(
-    JSON.parse(localStorage.getItem("clicksusUser")) || null
+    JSON.parse(localStorage.getItem("clicksusUser")) || null,
   );
   const [especialidadeSelecionada, setEspecialidadeSelecionada] = useState("");
   const [clinicaSelecionada, setClinicaSelecionada] = useState(null);
+  const [consultaAgendada, setConsultaAgendada] = useState(null);
 
   const goHome = () => setPage("home");
 
@@ -29,9 +30,7 @@ function App() {
         <Login setPage={setPage} setUser={setUser} goHome={goHome} />
       )}
 
-      {page === "cadastro" && (
-        <Cadastro setPage={setPage} setUser={setUser} />
-      )}
+      {page === "cadastro" && <Cadastro setPage={setPage} setUser={setUser} />}
 
       {page === "sucesso" && <Sucesso goHome={goHome} />}
 
@@ -39,16 +38,16 @@ function App() {
 
       {page === "consultas" && (
         <Consultas
-        setPage={setPage}
-        setEspecialidadeSelecionada={setEspecialidadeSelecionada}
+          setPage={setPage}
+          setEspecialidadeSelecionada={setEspecialidadeSelecionada}
         />
       )}
 
       {page === "clinicas" && (
         <Clinicas
-        setPage={setPage}
-        especialidadeSelecionada={especialidadeSelecionada}
-        setClinicaSelecionada={setClinicaSelecionada}
+          setPage={setPage}
+          especialidadeSelecionada={especialidadeSelecionada}
+          setClinicaSelecionada={setClinicaSelecionada}
         />
       )}
 
@@ -57,7 +56,23 @@ function App() {
           setPage={setPage}
           especialidadeSelecionada={especialidadeSelecionada}
           clinicaSelecionada={clinicaSelecionada}
-          />
+          setConsultaAgendada={setConsultaAgendada}
+        />
+      )}
+
+      {page === "sucessoConsulta" && (
+        <SucessoConsulta
+        setPage={setPage}
+        consultaAgendada={consultaAgendada}
+        />
+      )}
+
+      {page === "minhasConsultas" && (
+        <MinhasConsultas setPage={setPage} />
+      )}
+
+      {page === "historicoConsultas" && (
+        <HistoricoConsultas setPage={setPage} />
       )}
 
       {["perfil", "farmacia", "vacinas"].includes(page) && (
@@ -105,10 +120,22 @@ function Header({ title, subtitle }) {
 function GoogleIcon() {
   return (
     <svg width="26" height="26" viewBox="0 0 48 48">
-      <path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.3 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.1 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z" />
-      <path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.1 6.1 29.3 4 24 4 16.3 4 9.6 8.3 6.3 14.7z" />
-      <path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.5-5.2l-6.2-5.2C29.3 35.1 26.8 36 24 36c-5.3 0-9.7-3.3-11.3-7.9l-6.5 5C9.5 39.6 16.2 44 24 44z" />
-      <path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.4-2.3 4.4-4.1 5.6l6.2 5.2C36.9 39.2 44 34 44 24c0-1.3-.1-2.4-.4-3.5z" />
+      <path
+        fill="#FFC107"
+        d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.3 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.1 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z"
+      />
+      <path
+        fill="#FF3D00"
+        d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.1 6.1 29.3 4 24 4 16.3 4 9.6 8.3 6.3 14.7z"
+      />
+      <path
+        fill="#4CAF50"
+        d="M24 44c5.2 0 9.9-2 13.5-5.2l-6.2-5.2C29.3 35.1 26.8 36 24 36c-5.3 0-9.7-3.3-11.3-7.9l-6.5 5C9.5 39.6 16.2 44 24 44z"
+      />
+      <path
+        fill="#1976D2"
+        d="M43.6 20.5H42V20H24v8h11.3c-.8 2.4-2.3 4.4-4.1 5.6l6.2 5.2C36.9 39.2 44 34 44 24c0-1.3-.1-2.4-.4-3.5z"
+      />
     </svg>
   );
 }
@@ -120,79 +147,79 @@ function Login({ setPage, setUser, goHome }) {
   const [erro, setErro] = useState("");
 
   function entrar() {
-  const savedUser = JSON.parse(localStorage.getItem("clicksusUser"));
+    const savedUser = JSON.parse(localStorage.getItem("clicksusUser"));
 
-  if (cpf.length < 14 || senha.length < 4) {
-    setErro("Digite um CPF válido e uma senha com pelo menos 4 caracteres.");
-    return;
+    if (cpf.length < 14 || senha.length < 4) {
+      setErro("Digite um CPF válido e uma senha com pelo menos 4 caracteres.");
+      return;
+    }
+
+    if (!savedUser) {
+      setErro("Nenhum usuário cadastrado. Faça seu cadastro primeiro.");
+      return;
+    }
+
+    if (savedUser.cpf !== cpf) {
+      setErro("CPF não encontrado. Verifique ou faça seu cadastro.");
+      return;
+    }
+
+    if (savedUser.senha !== senha) {
+      setErro("Senha incorreta.");
+      return;
+    }
+
+    setUser(savedUser);
+    goHome();
   }
 
-  if (!savedUser) {
-    setErro("Nenhum usuário cadastrado. Faça seu cadastro primeiro.");
-    return;
+  function recuperarSenha() {
+    const savedUser = JSON.parse(localStorage.getItem("clicksusUser"));
+
+    if (!cpf) {
+      setErro("Digite seu CPF para recuperar a senha.");
+      return;
+    }
+
+    if (!savedUser || savedUser.cpf !== cpf) {
+      setErro("CPF não encontrado para recuperação de senha.");
+      return;
+    }
+
+    setErro("Enviamos as instruções de recuperação para o e-mail cadastrado.");
   }
 
-  if (savedUser.cpf !== cpf) {
-    setErro("CPF não encontrado. Verifique ou faça seu cadastro.");
-    return;
+  function entrarComGov() {
+    const govUser = {
+      nome: "Usuário gov.br",
+      cpf: "000.000.000-00",
+      email: "usuario@gov.br",
+      telefone: "",
+      endereco: "",
+      senha: "",
+      loginSocial: "gov.br",
+    };
+
+    localStorage.setItem("clicksusUser", JSON.stringify(govUser));
+    setUser(govUser);
+    goHome();
   }
 
-  if (savedUser.senha !== senha) {
-    setErro("Senha incorreta.")
-    return;
+  function entrarComGoogle() {
+    const googleUser = {
+      nome: "Usuário Google",
+      cpf: "111.111.111-11",
+      email: "usuario@gmail.com",
+      telefone: "",
+      endereco: "",
+      senha: "",
+      loginSocial: "Google",
+    };
+
+    localStorage.setItem("clicksusUser", JSON.stringify(googleUser));
+    setUser(googleUser);
+    goHome();
   }
-
-  setUser(savedUser);
-  goHome();
-}
-
-function recuperarSenha() {
-  const savedUser = JSON.parse(localStorage.getItem("clicksusUser"));
-
-  if (!cpf) {
-    setErro("Digite seu CPF para recuperar a senha.");
-    return;
-  }
-
-  if (!savedUser || savedUser.cpf !== cpf) {
-    setErro("CPF não encontrado para recuperação de senha.");
-    return;
-  }
-
-  setErro("Enviamos as instruções de recuperação para o e-mail cadastrado.");
-}
-
-function entrarComGov() {
-  const govUser = {
-    nome: "Usuário gov.br",
-    cpf: "000.000.000-00",
-    email:"usuario@gov.br",
-    telefone: "",
-    endereco: "",
-    senha: "",
-    loginSocial: "gov.br",
-  };
-
-  localStorage.setItem("clicksusUser", JSON.stringify(govUser));
-  setUser(govUser);
-  goHome();
-}
-
-function entrarComGoogle() {
-  const googleUser = {
-    nome: "Usuário Google",
-    cpf: "111.111.111-11",
-    email: "usuario@gmail.com",
-    telefone: "",
-    endereco: "",
-    senha: "",
-    loginSocial: "Google",
-  };
-
-  localStorage.setItem("clicksusUser", JSON.stringify(googleUser));
-  setUser(googleUser);
-  goHome();
-}
 
   return (
     <>
@@ -237,10 +264,10 @@ function entrarComGoogle() {
               <span className="govGreen">br</span>
             </button>
 
-              <button className="googleBtn" onClick={entrarComGoogle}>
-                <GoogleIcon />
-                </button>
-              </div>
+            <button className="googleBtn" onClick={entrarComGoogle}>
+              <GoogleIcon />
+            </button>
+          </div>
 
           <div className="watermark">✚</div>
 
@@ -278,28 +305,28 @@ function Cadastro({ setPage, setUser }) {
   }
 
   function cadastrar() {
-  const camposVazios = Object.values(form).some((valor) => !valor);
-  const savedUser = JSON.parse(localStorage.getItem("clicksusUser"));
+    const camposVazios = Object.values(form).some((valor) => !valor);
+    const savedUser = JSON.parse(localStorage.getItem("clicksusUser"));
 
-  if (camposVazios) {
-    setErro("Preencha todos os campos obrigatórios.");
-    return;
+    if (camposVazios) {
+      setErro("Preencha todos os campos obrigatórios.");
+      return;
+    }
+
+    if (form.cpf.length < 14) {
+      setErro("Digite um CPF válido.");
+      return;
+    }
+
+    if (savedUser && savedUser.cpf === form.cpf) {
+      setErro("Este CPF já está cadastrado. Faça login.");
+      return;
+    }
+
+    localStorage.setItem("clicksusUser", JSON.stringify(form));
+    setUser(form);
+    setPage("sucesso");
   }
-
-  if (form.cpf.length < 14) {
-    setErro("Digite um CPF válido.");
-    return;
-  }
-
-  if (savedUser && savedUser.cpf === form.cpf) {
-    setErro("Este CPF já está cadastrado. Faça login.");
-    return;
-  }
-
-  localStorage.setItem("clicksusUser", JSON.stringify(form));
-  setUser(form);
-  setPage("sucesso");
-}
 
   return (
     <>
@@ -336,7 +363,9 @@ function Cadastro({ setPage, setUser }) {
           <label>Telefone *</label>
           <input
             value={form.telefone}
-            onChange={(e) => updateField("telefone", formatPhone(e.target.value))}
+            onChange={(e) =>
+              updateField("telefone", formatPhone(e.target.value))
+            }
             placeholder="(11) 4002-8922"
             inputMode="numeric"
           />
@@ -412,10 +441,26 @@ function HomePage({ user, setPage }) {
         </section>
 
         <section className="grid">
-          <MenuCard icon={<User />} title="Perfil" onClick={() => setPage("perfil")} />
-          <MenuCard icon={<CalendarDays />} title="Consultas" onClick={() => setPage("consultas")} />
-          <MenuCard icon={<ClipboardPen />} title="Cadastro" onClick={() => setPage("cadastro")} />
-          <MenuCard icon={<Syringe />} title="Vacinas" onClick={() => setPage("vacinas")} />
+          <MenuCard
+            icon={<User />}
+            title="Perfil"
+            onClick={() => setPage("perfil")}
+          />
+          <MenuCard
+            icon={<CalendarDays />}
+            title="Consultas"
+            onClick={() => setPage("consultas")}
+          />
+          <MenuCard
+            icon={<ClipboardPen />}
+            title="Cadastro"
+            onClick={() => setPage("cadastro")}
+          />
+          <MenuCard
+            icon={<Syringe />}
+            title="Vacinas"
+            onClick={() => setPage("vacinas")}
+          />
         </section>
 
         <BottomNav setPage={setPage} active="home" />
@@ -483,7 +528,7 @@ function Consultas({ setPage, setEspecialidadeSelecionada }) {
     "Dermatologista",
     "Psiquiatra",
   ];
-  
+
   return (
     <>
       <Header title="CONSULTAS" />
@@ -494,7 +539,7 @@ function Consultas({ setPage, setEspecialidadeSelecionada }) {
         <section className="tabs">
           <button className="activeTab">Agendamentos</button>
           <button>Minhas Consultas</button>
-          <button>Histórico</button>
+          <button onClick={() => setPage("historicoConsultas")}>Histórico</button>
         </section>
 
         <section className="specialtyList">
@@ -503,13 +548,13 @@ function Consultas({ setPage, setEspecialidadeSelecionada }) {
               key={especialidade}
               className="specialtyItem"
               onClick={() => {
-                setEspecialidadeSelecionada(especialidade)
+                setEspecialidadeSelecionada(especialidade);
                 setPage("clinicas");
               }}
-              >
-                <span className="specialtyIcon">👩‍⚕️</span>
-                <strong>{especialidade}</strong>
-              </button>
+            >
+              <span className="specialtyIcon">👩‍⚕️</span>
+              <strong>{especialidade}</strong>
+            </button>
           ))}
         </section>
 
@@ -519,7 +564,11 @@ function Consultas({ setPage, setEspecialidadeSelecionada }) {
   );
 }
 
-function Clinicas({ setPage, especialidadeSelecionada, setClinicaSelecionada }) {
+function Clinicas({
+  setPage,
+  especialidadeSelecionada,
+  setClinicaSelecionada,
+}) {
   const clinicas = [
     {
       nome: "Clínica da Família Saúde",
@@ -582,11 +631,13 @@ function Clinicas({ setPage, especialidadeSelecionada, setClinicaSelecionada }) 
                 <p>Especialidades: {clinica.especialidades}</p>
 
                 <div className="clinicDetails">
-                  <span>📍 {clinica.distancia} • {clinica.bairro}</span>
+                  <span>
+                    📍 {clinica.distancia} • {clinica.bairro}
+                  </span>
                   <span>🕘 {clinica.horario}</span>
                 </div>
 
-                <button 
+                <button
                   onClick={() => {
                     setClinicaSelecionada(clinica);
                     setPage("dataHorario");
@@ -602,10 +653,15 @@ function Clinicas({ setPage, especialidadeSelecionada, setClinicaSelecionada }) 
         <BottomNav setPage={setPage} active="consultas" />
       </main>
     </>
-  )
+  );
 }
 
-function DataHorario({ setPage, especialidadeSelecionada, clinicaSelecionada }) {
+function DataHorario({
+  setPage,
+  especialidadeSelecionada,
+  clinicaSelecionada,
+  setConsultaAgendada,
+}) {
   const [dataSelecionada, setDataSelecionada] = useState("");
   const [horarioSelecionado, setHorarioSelecionado] = useState("");
   const [erro, setErro] = useState("");
@@ -615,13 +671,22 @@ function DataHorario({ setPage, especialidadeSelecionada, clinicaSelecionada }) 
 
   function confirmar() {
     if (!dataSelecionada || !horarioSelecionado) {
-      setErro("Selecione uma data e um horário.");
+      setErro("Selecione uma data e um horário");
       return;
     }
 
-    alert(
-      `Consulta selecionada:\n${especialidadeSelecionada}\n${clinicaSelecionada?.nome}\n${dataSelecionada} às ${horarioSelecionado}`
-    );
+    const novaConsulta = {
+      especialidade: especialidadeSelecionada,
+      clinica: clinicaSelecionada?.nome,
+      endereco: clinicaSelecionada.bairro,
+      data: dataSelecionada,
+      horario: horarioSelecionado,
+      status: "Agendada",
+    };
+
+    localStorage.setItem("clicksusConsulta", JSON.stringify(novaConsulta));
+    setConsultaAgendada(novaConsulta)
+    setPage("sucessoConsulta");
   }
 
   return (
@@ -664,7 +729,9 @@ function DataHorario({ setPage, especialidadeSelecionada, clinicaSelecionada }) 
             {horarios.map((horario) => (
               <button
                 key={horario}
-                className={horarioSelecionado === horario ? "selectedOption" : ""}
+                className={
+                  horarioSelecionado === horario ? "selectedOption" : ""
+                }
                 onClick={() => setHorarioSelecionado(horario)}
               >
                 {horario}
@@ -677,6 +744,147 @@ function DataHorario({ setPage, especialidadeSelecionada, clinicaSelecionada }) 
           <button className="primaryBtn" onClick={confirmar}>
             Confirmar
           </button>
+        </section>
+
+        <BottomNav setPage={setPage} active="consultas" />
+      </main>
+    </>
+  );
+}
+
+function SucessoConsulta({ setPage, consultaAgendada }) {
+  return (
+    <>
+      <Header title="CONSULTAS" />
+
+      <main className="screen consultasScreen">
+        <section className="card successCard">
+          <CheckCircle size={145} color="#00a6ac" />
+
+          <h3>Consulta Agendada!</h3>
+
+          <p>
+            Sua consulta de <strong>{consultaAgendada?.especialidade}</strong>{" "}
+            foi agendada com sucesso.
+          </p>
+
+          <p>
+            <strong>Clínica:</strong> {consultaAgendada?.clinica}
+          </p>
+
+          <p>
+            <strong>Data:</strong> {consultaAgendada?.data} às{" "}
+            {consultaAgendada?.horario}
+          </p>
+
+          <button className="primaryBtn" onClick={() => setPage("home")}>
+            Início
+          </button>
+
+          <button className="linkBtn" onClick={() => setPage("minhasConsultas")}>
+            Ver Consultas
+          </button>
+        </section>
+
+        <BottomNav setPage={setPage} active="consultas" />
+      </main>
+    </>
+  );
+}
+
+function MinhasConsultas({ setPage }) {
+  const consulta = JSON.parse(localStorage.getItem("clicksusConsulta"));
+
+  return (
+    <>
+      <Header title="CONSULTAS" />
+
+      <main className="screen consultasScreen">
+        <section className="tabs">
+          <button className="activeTab">Minhas Consultas</button>
+          <button onClick={() => setPage("consultas")}>Agendamentos</button>
+          <button>Histórico</button>
+        </section>
+
+        <h3 className="sectionTitle">Minhas Consultas</h3>
+
+        {consulta ? (
+          <article className="myAppointmentCard">
+            <div className="appointmentDate">
+              <strong>{consulta.data}</strong>
+              <span>{consulta.horario}</span>
+            </div>
+
+            <div>
+              <h3>{consulta.especialidade}</h3>
+              <p>{consulta.clinica}</p>
+              <p>Status: {consulta.status}</p>
+            </div>
+          </article>
+        ) : (
+          <section className="appointmentBox">
+            <p>Nenhuma consulta agendada no momento.</p>
+
+            <button className="primaryBtn" onClick={() => setPage("consultas")}>
+              Agendar
+            </button>
+          </section>
+        )}
+
+        <BottomNav setPage={setPage} active="consultas" />
+      </main>
+    </>
+  );
+}
+
+function HistoricoConsultas({ setPage }) {
+  const historico = [
+    {
+      data: "12/05/2024",
+      clinica: "Clínica de Especialidades Consulta Fácil",
+      medico: "Dr. João Souza",
+      especialidade: "Cardiologista",
+      diagnostico: "Hipertensão Arterial",
+      prescricao: "Dipirona 50 mg",
+    },
+    {
+      data: "12/05/2024",
+      clinica: "Clínica da Família Saúde",
+      medico: "Dr. Paulo César",
+      especialidade: "Dermatologista",
+      diagnostico: "Acne",
+      prescricao: "Roacutan",
+    },
+  ];
+
+  return (
+    <>
+      <Header title="CONSULTAS" />
+
+      <main className="screen consultasScreen">
+        <section className="tabs">
+          <button onClick={() => setPage("minhasConsultas")}>
+            Minhas Consultas
+          </button>
+          <button onClick={() => setPage("consultas")}>Agendamentos</button>
+          <button className="activeTab">Histórico</button>
+        </section>
+
+        <h3 className="sectionTitle">Histórico de Consultas</h3>
+
+        <section className="historyList">
+          {historico.map((item, index) => (
+            <article className="historyCard" key={index}>
+              <span className="historyDate">{item.data}</span>
+
+              <h3>{item.clinica}</h3>
+
+              <p>🏥 {item.medico}</p>
+              <p>❤️ {item.especialidade}</p>
+              <p>💉 Diagnóstico: {item.diagnostico}</p>
+              <p>💼 Prescrição: {item.prescricao}</p>
+            </article>
+          ))}
         </section>
 
         <BottomNav setPage={setPage} active="consultas" />

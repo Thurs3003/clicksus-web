@@ -140,8 +140,12 @@ function App() {
 
       {page === "minhasVacinas" && <MinhasVacinas setPage={setPage} />}
 
-      {["perfil"].includes(page) && (
-        <Placeholder title={page} setPage={setPage} />
+      {page === "perfil" && (
+        <Perfil setPage={setPage} user={user} setUser={setUser} />
+      )}
+
+      {page === "editarPerfil" && (
+        <EditarPerfil setPage={setPage} user={user} setUser={setUser} />
       )}
     </div>
   );
@@ -508,7 +512,10 @@ function HomePage({ user, setPage }) {
       <main className="screen homeScreen">
         <section className="card welcomeCard">
           <div>
-            <h3>Bem-Vindo(a), {nome}!</h3>
+            <h3>
+              Bem-Vindo(a),
+              <span className="welcomeName">{nome}!</span>
+            </h3>
             <p>Como podemos ajudar você hoje?</p>
           </div>
 
@@ -755,13 +762,19 @@ function DataHorario({
     const novaConsulta = {
       especialidade: especialidadeSelecionada,
       clinica: clinicaSelecionada?.nome,
-      endereco: clinicaSelecionada.bairro,
+      endereco: clinicaSelecionada?.bairro,
       data: dataSelecionada,
       horario: horarioSelecionado,
       status: "Agendada",
     };
 
-    localStorage.setItem("clicksusConsulta", JSON.stringify(novaConsulta));
+    const consultasSalvas =
+      JSON.parse(localStorage.getItem("clicksusConsultas")) || [];
+
+    consultasSalvas.push(novaConsulta);
+
+    localStorage.setItem("clicksusConsultas", JSON.stringify(consultasSalvas));
+
     setConsultaAgendada(novaConsulta);
     setPage("sucessoConsulta");
   }
@@ -873,7 +886,7 @@ function SucessoConsulta({ setPage, consultaAgendada }) {
 }
 
 function MinhasConsultas({ setPage }) {
-  const consulta = JSON.parse(localStorage.getItem("clicksusConsulta"));
+  const consultas = JSON.parse(localStorage.getItem("clicksusConsultas")) || [];
 
   return (
     <>
@@ -888,19 +901,23 @@ function MinhasConsultas({ setPage }) {
 
         <h3 className="sectionTitle">Minhas Consultas</h3>
 
-        {consulta ? (
-          <article className="myAppointmentCard">
-            <div className="appointmentDate">
-              <strong>{consulta.data}</strong>
-              <span>{consulta.horario}</span>
-            </div>
+        {consultas.length > 0 ? (
+          <section className="historyList">
+            {consultas.map((consulta, index) => (
+              <article className="myAppointmentCard" key={index}>
+                <div className="appointmentDate">
+                  <strong>{consulta.data}</strong>
+                  <span>{consulta.horario}</span>
+                </div>
 
-            <div>
-              <h3>{consulta.especialidade}</h3>
-              <p>{consulta.clinica}</p>
-              <p>Status: {consulta.status}</p>
-            </div>
-          </article>
+                <div>
+                  <h3>{consulta.especialidade}</h3>
+                  <p>{consulta.clinica}</p>
+                  <p>Status: {consulta.status}</p>
+                </div>
+              </article>
+            ))}
+          </section>
         ) : (
           <section className="appointmentBox">
             <p>Nenhuma consulta agendada no momento.</p>
@@ -1168,7 +1185,12 @@ function AgendarRetirada({
       unidade: medicamentoSelecionado?.unidade,
     };
 
-    localStorage.setItem("clicksusRetirada", JSON.stringify(retirada));
+    const retiradasSalvas =
+      JSON.parse(localStorage.getItem("clicksusRetiradas")) || [];
+
+    retiradasSalvas.push(retirada);
+
+    localStorage.setItem("clicksusRetiradas", JSON.stringify(retiradasSalvas));
     setRetiradaMedicamento(retirada);
     setPage("sucessoRetirada");
   }
@@ -1569,7 +1591,12 @@ function AgendarVacina({
       status: "Agendada",
     };
 
-    localStorage.setItem("clicksusVacina", JSON.stringify(novaVacina));
+    const vacinasSalvas =
+      JSON.parse(localStorage.getItem("clicksusVacinas")) || [];
+
+    vacinasSalvas.push(novaVacina);
+
+    localStorage.setItem("clicksusVacinas", JSON.stringify(vacinasSalvas));
     setVacinaAgendada(novaVacina);
     setPage("sucessoVacina");
   }
@@ -1678,8 +1705,7 @@ function SucessoVacina({ setPage, vacinaAgendada }) {
 }
 
 function MinhasVacinas({ setPage }) {
-  const vacina = JSON.parse(localStorage.getItem("clicksusVacina"));
-
+  const vacinas = JSON.parse(localStorage.getItem("clicksusVacinas")) || [];
   return (
     <>
       <Header title="VACINAS" />
@@ -1691,19 +1717,23 @@ function MinhasVacinas({ setPage }) {
 
         <h3 className="sectionTitle">Minhas Vacinas</h3>
 
-        {vacina ? (
-          <article className="myAppointmentCard">
-            <div className="appointmentDate">
-              <strong>{vacina.data}</strong>
-              <span>{vacina.horario}</span>
-            </div>
+        {vacinas.length > 0 ? (
+          <section className="historyList">
+            {vacinas.map((vacina, index) => (
+              <article className="myAppointmentCard" key={index}>
+                <div className="appointmentDate">
+                  <strong>{vacina.data}</strong>
+                  <span>{vacina.horario}</span>
+                </div>
 
-            <div>
-              <h3>{vacina.vacina}</h3>
-              <p>{vacina.unidade}</p>
-              <p>Status: {vacina.status}</p>
-            </div>
-          </article>
+                <div>
+                  <h3>{vacina.vacina}</h3>
+                  <p>{vacina.unidade}</p>
+                  <p>Status: {vacina.status}</p>
+                </div>
+              </article>
+            ))}
+          </section>
         ) : (
           <section className="appointmentBox">
             <p>Nenhuma vacina agendada no momento.</p>
@@ -1715,6 +1745,171 @@ function MinhasVacinas({ setPage }) {
         )}
 
         <BottomNav setPage={setPage} active="vacinas" />
+      </main>
+    </>
+  );
+}
+
+function Perfil({ setPage, user, setUser }) {
+  const usuario = user || JSON.parse(localStorage.getItem("clicksusUser"));
+
+  function sairDaConta() {
+    setUser(null);
+    setPage("login");
+  }
+
+  return (
+    <>
+      <Header title="PERFIL" />
+
+      <main className="screen perfilScreen">
+        <section className="profileHero">
+          <div className="profileAvatar">
+            <User />
+          </div>
+
+          <div>
+            <h3>{usuario?.nome || "Usuário ClickSUS"}</h3>
+            <p>Paciente cadastrado no ClickSUS</p>
+          </div>
+        </section>
+
+        <section className="profileDetails">
+          <h3>Dados pessoais</h3>
+
+          <div className="profileRow">
+            <span>CPF</span>
+            <strong>{usuario?.cpf || "Não informado"}</strong>
+          </div>
+
+          <div className="profileRow">
+            <span>Telefone</span>
+            <strong>{usuario?.telefone || "Não informado"}</strong>
+          </div>
+
+          <div className="profileRow">
+            <span>Email</span>
+            <strong>{usuario?.email || "Não informado"}</strong>
+          </div>
+
+          <div className="profileRow">
+            <span>Endereço</span>
+            <strong>{usuario?.endereco || "Não informado"}</strong>
+          </div>
+        </section>
+
+        <section className="profileActions">
+          <button onClick={() => setPage("editarPerfil")}>Editar Dados</button>
+          <button onClick={() => setPage("minhasConsultas")}>
+            Minhas Consultas
+          </button>
+          <button onClick={() => setPage("minhasVacinas")}>
+            Minhas Vacinas
+          </button>
+          <button className="logoutBtn" onClick={sairDaConta}>
+            Sair da Conta
+          </button>
+        </section>
+
+        <BottomNav setPage={setPage} active="perfil" />
+      </main>
+    </>
+  );
+}
+
+function EditarPerfil({ setPage, user, setUser }) {
+  const usuarioAtual = user || JSON.parse(localStorage.getItem("clicksusUser"));
+
+  const [form, setForm] = useState({
+    nome: usuarioAtual?.nome || "",
+    endereco: usuarioAtual?.endereco || "",
+    email: usuarioAtual?.email || "",
+    telefone: usuarioAtual?.telefone || "",
+    cpf: usuarioAtual?.cpf || "",
+    senha: usuarioAtual?.senha || "",
+  });
+
+  const [erro, setErro] = useState("");
+
+  function updateField(campo, valor) {
+    setForm({ ...form, [campo]: valor });
+  }
+
+  function salvarDados() {
+    const camposVazios = Object.values(form).some((valor) => !valor);
+
+    if (camposVazios) {
+      setErro("Preencha todos os campos.");
+      return;
+    }
+
+    localStorage.setItem("clicksusUser", JSON.stringify(form));
+    setUser(form);
+    setPage("perfil");
+  }
+
+  return (
+    <>
+      <Header title="PERFIL" />
+
+      <main className="screen perfilScreen">
+        <button className="backBtn" onClick={() => setPage("perfil")}>
+          ← Voltar para Perfil
+        </button>
+
+        <section className="appointmentBox">
+          <h3>Editar Dados</h3>
+
+          <label>Nome *</label>
+          <input
+            value={form.nome}
+            onChange={(e) => updateField("nome", e.target.value)}
+          />
+
+          <label>Endereço *</label>
+          <input
+            value={form.endereco}
+            onChange={(e) => updateField("endereco", e.target.value)}
+          />
+
+          <label>Email *</label>
+          <input
+            value={form.email}
+            onChange={(e) => updateField("email", e.target.value)}
+            type="email"
+          />
+
+          <label>Telefone *</label>
+          <input
+            value={form.telefone}
+            onChange={(e) =>
+              updateField("telefone", formatPhone(e.target.value))
+            }
+            inputMode="numeric"
+          />
+
+          <label>CPF *</label>
+          <input
+            value={form.cpf}
+            onChange={(e) => updateField("cpf", formatCPF(e.target.value))}
+            inputMode="numeric"
+          />
+
+          <label>Senha *</label>
+          <input
+            value={form.senha}
+            onChange={(e) => updateField("senha", e.target.value)}
+            type="password"
+          />
+
+          {erro && <p className="erro">{erro}</p>}
+
+          <button className="primaryBtn" onClick={salvarDados}>
+            Salvar
+          </button>
+        </section>
+
+        <BottomNav setPage={setPage} active="perfil" />
       </main>
     </>
   );

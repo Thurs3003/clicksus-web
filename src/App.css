@@ -1017,3 +1017,148 @@ input:focus {
   cursor: pointer;
   margin-left: 15px;
 }
+
+.perfilScreen {
+  padding-bottom: 110px;
+}
+
+.profileHero {
+  background: linear-gradient(135deg, #55d1d1, #8edfe0);
+  border-radius: 30px;
+  padding: 34px;
+  color: white;
+  box-shadow: 6px 6px 0 #d7eeee;
+  margin-bottom: 28px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.profileAvatar {
+  min-width: 115px;
+  height: 115px;
+  border-radius: 50%;
+  background: white;
+  color: #00a6ac;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.profileAvatar svg {
+  width: 68px;
+  height: 68px;
+}
+
+.profileHero h3 {
+  font-size: 34px;
+  margin: 0 0 6px;
+}
+
+.profileHero p {
+  margin: 0;
+  font-size: 18px;
+  opacity: 0.95;
+}
+
+.profileDetails {
+  background: white;
+  border-radius: 28px;
+  padding: 28px;
+  box-shadow: 5px 5px 0 #d7eeee;
+  margin-bottom: 28px;
+}
+
+.profileDetails h3 {
+  color: #008d96;
+  margin: 0 0 20px;
+  font-size: 26px;
+}
+
+.profileRow {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  border-bottom: 1px solid #e5e5e5;
+  padding: 14px 0;
+}
+
+.profileRow span {
+  color: #777;
+  font-weight: bold;
+}
+
+.profileRow strong {
+  color: #222;
+  text-align: right;
+}
+
+.profileActions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 18px;
+}
+
+.profileActions button {
+  min-height: 76px;
+  border-radius: 22px;
+  border: none;
+  background: white;
+  color: #008d96;
+  font-size: 19px;
+  font-weight: bold;
+  box-shadow: 5px 5px 0 #d7eeee;
+  cursor: pointer;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.profileActions button:hover {
+  transform: translateY(-5px);
+  box-shadow: 5px 10px 18px rgba(0, 0, 0, 0.13);
+}
+
+.profileActions .logoutBtn {
+  background: #fff4f4;
+  color: #d62828;
+}
+
+@media (max-width: 600px) {
+  .profileHero {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .profileRow {
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .profileRow strong {
+    text-align: left;
+  }
+}
+
+.welcomeCard h3 {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.welcomeName {
+  font-size: 1.15em;
+  color: #008d96;
+  font-weight: 700;
+  animation: welcomeNameBounce 0.65s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes welcomeNameBounce {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.96);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}

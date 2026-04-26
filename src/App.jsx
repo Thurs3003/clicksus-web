@@ -1811,9 +1811,102 @@ function Perfil({ setPage, user, setUser }) {
           </button>
         </section>
 
+        <MiniChatBot />
         <BottomNav setPage={setPage} active="perfil" />
       </main>
     </>
+  );
+}
+
+function MiniChatBot() {
+  const [mensagem, setMensagem] = useState("");
+  const [chat, setChat] = useState([
+    {
+      autor: "bot",
+      texto:
+        "Olá! Sou o assistente virtual do ClickSUS. Posso ajudar com consultas, vacinas, farmácia e perfil.",
+    },
+  ]);
+
+  function gerarResposta(textoDigitado) {
+    const texto = textoDigitado.toLowerCase();
+
+    if (texto.includes("consulta")) {
+      return "Para agendar uma consulta, acesse Consultas e escolha especialidade, clínica, data e horário.";
+    }
+
+    if (texto.includes("vacina")) {
+      return "Para vacinas, acesse Vacinas, escolha a vacina desejada e selecione uma unidade.";
+    }
+
+    if (texto.includes("remédio") || texto.includes("medicamento")) {
+      return "Na aba Farmácia você pode ver medicamentos, receitas, unidades e retirada.";
+    }
+
+    if (texto.includes("perfil") || texto.includes("dados")) {
+      return "No Perfil você pode visualizar e editar seus dados pessoais.";
+    }
+
+    return "Posso te ajudar com consultas, vacinas, farmácia ou dados do perfil.";
+  }
+
+  function enviarMensagem(textoRapido = mensagem) {
+    if (!textoRapido.trim()) return;
+
+    const resposta = gerarResposta(textoRapido);
+
+    setChat([
+      ...chat,
+      { autor: "user", texto: textoRapido },
+      { autor: "bot", texto: resposta },
+    ]);
+
+    setMensagem("");
+  }
+
+  return (
+    <section className="miniChatCard">
+      <div className="miniChatHeader">
+        <div className="botAvatar">🤖</div>
+
+        <div>
+          <h3>Assistente ClickSUS</h3>
+          <p>Online agora • Respostas rápidas</p>
+        </div>
+      </div>
+
+      <div className="quickSuggestions">
+        <button onClick={() => enviarMensagem("Como agendar consulta?")}>
+          Consulta
+        </button>
+        <button onClick={() => enviarMensagem("Como agendar vacina?")}>
+          Vacina
+        </button>
+        <button onClick={() => enviarMensagem("Meus medicamentos")}>
+          Farmácia
+        </button>
+      </div>
+
+      <div className="miniChatMessages">
+        {chat.map((msg, index) => (
+          <div key={index} className={`miniMessage ${msg.autor}`}>
+            {msg.autor === "bot" && <span className="messageIcon">✚</span>}
+            <p>{msg.texto}</p>
+          </div>
+        ))}
+      </div>
+
+      <div className="miniChatInput">
+        <input
+          value={mensagem}
+          onChange={(e) => setMensagem(e.target.value)}
+          placeholder="Digite sua dúvida..."
+          onKeyDown={(e) => e.key === "Enter" && enviarMensagem()}
+        />
+
+        <button onClick={() => enviarMensagem()}>Enviar</button>
+      </div>
+    </section>
   );
 }
 

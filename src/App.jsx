@@ -9,6 +9,7 @@ import {
   CheckCircle,
   Eye,
   EyeOff,
+  Bot,
 } from "lucide-react";
 
 import { FaPhoneAlt } from "react-icons/fa";
@@ -21,6 +22,12 @@ function App() {
   const [especialidadeSelecionada, setEspecialidadeSelecionada] = useState("");
   const [clinicaSelecionada, setClinicaSelecionada] = useState(null);
   const [consultaAgendada, setConsultaAgendada] = useState(null);
+  const [medicamentoSelecionado, setMedicamentoSelecionado] = useState(null);
+  const [retiradaMedicamento, setRetiradaMedicamento] = useState(null);
+  const [vacinaSelecionada, setVacinaSelecionada] = useState(null);
+  const [unidadeVacinaSelecionada, setUnidadeVacinaSelecionada] =
+    useState(null);
+  const [vacinaAgendada, setVacinaAgendada] = useState(null);
 
   const goHome = () => setPage("home");
 
@@ -62,20 +69,78 @@ function App() {
 
       {page === "sucessoConsulta" && (
         <SucessoConsulta
-        setPage={setPage}
-        consultaAgendada={consultaAgendada}
+          setPage={setPage}
+          consultaAgendada={consultaAgendada}
         />
       )}
 
-      {page === "minhasConsultas" && (
-        <MinhasConsultas setPage={setPage} />
-      )}
+      {page === "minhasConsultas" && <MinhasConsultas setPage={setPage} />}
 
       {page === "historicoConsultas" && (
         <HistoricoConsultas setPage={setPage} />
       )}
 
-      {["perfil", "farmacia", "vacinas"].includes(page) && (
+      {page === "farmacia" && <Farmacia setPage={setPage} />}
+
+      {page === "medicamentos" && (
+        <Medicamentos
+          setPage={setPage}
+          setMedicamentoSelecionado={setMedicamentoSelecionado}
+        />
+      )}
+
+      {page === "unidadesFarmacia" && <UnidadesFarmacia setPage={setPage} />}
+
+      {page === "receitas" && <Receitas setPage={setPage} />}
+
+      {page === "entregaCasa" && <EntregaCasa setPage={setPage} />}
+
+      {page === "agendarRetirada" && (
+        <AgendarRetirada
+          setPage={setPage}
+          medicamentoSelecionado={medicamentoSelecionado}
+          setRetiradaMedicamento={setRetiradaMedicamento}
+        />
+      )}
+
+      {page === "sucessoRetirada" && (
+        <SucessoRetirada
+          setPage={setPage}
+          retiradaMedicamento={retiradaMedicamento}
+        />
+      )}
+
+      {page === "vacinas" && (
+        <Vacinas
+          setPage={setPage}
+          setVacinaSelecionada={setVacinaSelecionada}
+        />
+      )}
+
+      {page === "unidadesVacina" && (
+        <UnidadesVacina
+          setPage={setPage}
+          vacinaSelecionada={vacinaSelecionada}
+          setUnidadeVacinaSelecionada={setUnidadeVacinaSelecionada}
+        />
+      )}
+
+      {page === "agendarVacina" && (
+        <AgendarVacina
+          setPage={setPage}
+          vacinaSelecionada={vacinaSelecionada}
+          unidadeVacinaSelecionada={unidadeVacinaSelecionada}
+          setVacinaAgendada={setVacinaAgendada}
+        />
+      )}
+
+      {page === "sucessoVacina" && (
+        <SucessoVacina setPage={setPage} vacinaAgendada={vacinaAgendada} />
+      )}
+
+      {page === "minhasVacinas" && <MinhasVacinas setPage={setPage} />}
+
+      {["perfil"].includes(page) && (
         <Placeholder title={page} setPage={setPage} />
       )}
     </div>
@@ -99,6 +164,16 @@ function formatPhone(value) {
   }
 
   return numbers.replace(/(\d{2})(\d{5})(\d{0,4})/, "($1) $2-$3");
+}
+
+function formatCEP(value) {
+  const somenteNumeros = value.replace(/[^0-9]/g, "").slice(0, 8);
+
+  if (somenteNumeros.length <= 5) {
+    return somenteNumeros;
+  }
+
+  return `${somenteNumeros.slice(0, 5)}-${somenteNumeros.slice(5)}`;
 }
 
 function Header({ title, subtitle }) {
@@ -539,7 +614,9 @@ function Consultas({ setPage, setEspecialidadeSelecionada }) {
         <section className="tabs">
           <button className="activeTab">Agendamentos</button>
           <button>Minhas Consultas</button>
-          <button onClick={() => setPage("historicoConsultas")}>Histórico</button>
+          <button onClick={() => setPage("historicoConsultas")}>
+            Histórico
+          </button>
         </section>
 
         <section className="specialtyList">
@@ -685,7 +762,7 @@ function DataHorario({
     };
 
     localStorage.setItem("clicksusConsulta", JSON.stringify(novaConsulta));
-    setConsultaAgendada(novaConsulta)
+    setConsultaAgendada(novaConsulta);
     setPage("sucessoConsulta");
   }
 
@@ -781,7 +858,10 @@ function SucessoConsulta({ setPage, consultaAgendada }) {
             Início
           </button>
 
-          <button className="linkBtn" onClick={() => setPage("minhasConsultas")}>
+          <button
+            className="linkBtn"
+            onClick={() => setPage("minhasConsultas")}
+          >
             Ver Consultas
           </button>
         </section>
@@ -888,6 +968,753 @@ function HistoricoConsultas({ setPage }) {
         </section>
 
         <BottomNav setPage={setPage} active="consultas" />
+      </main>
+    </>
+  );
+}
+
+function Farmacia({ setPage }) {
+  return (
+    <>
+      <Header title="FARMÁCIA" />
+
+      <main className="screen farmaciaScreen">
+        <h3 className="sectionPill">Acompanhe seus medicamentos</h3>
+
+        <section className="pharmacyPanel">
+          <article className="pharmacyCardLarge">
+            <div>
+              <h3>Meus Medicamentos</h3>
+              <p>Acompanhe seus remédios e retiradas.</p>
+            </div>
+
+            <button onClick={() => setPage("medicamentos")}>Ver todos</button>
+
+            <div className="medicineInfo">
+              <p>Próxima Retirada:</p>
+              <strong>Losartana 50mg</strong>
+              <span>Data: 10/04/2026 às 08:30</span>
+            </div>
+          </article>
+
+          <article className="pharmacyCardLarge">
+            <div>
+              <h3>Minhas receita Médicas</h3>
+              <p>Acompanhe suas receitas</p>
+            </div>
+
+            <button>Ver todos</button>
+
+            <div className="medicineInfo">
+              <p>Último envio:09/04/2026 | 17:34 horas</p>
+              <span>Médico: Doutor Ramon</span>
+              <span>Validade: 09/05/2026</span>
+            </div>
+          </article>
+
+          <section className="pharmacyGrid">
+            <button onClick={() => setPage("medicamentos")}>
+              <strong>Meus medicamentos</strong>
+              <span>Veja seus medicamentos disponibilizados pelo SUS.</span>
+            </button>
+
+            <button onClick={() => setPage("unidadesFarmacia")}>
+              <strong>Unidades de Farmácia</strong>
+              <span>Encontre farmácias do SUS perto de você.</span>
+            </button>
+
+            <button onClick={() => setPage("receitas")}>
+              <strong>Receitas</strong>
+              <span>Envie suas receitas médicas aqui.</span>
+            </button>
+
+            <button onClick={() => setPage("entregaCasa")}>
+              <strong>Entrega em casa</strong>
+              <span>Verifique a disponibilidade de entrega.</span>
+            </button>
+          </section>
+        </section>
+
+        <BottomNav setPage={setPage} active="farmacia" />
+      </main>
+    </>
+  );
+}
+
+function Medicamentos({ setPage, setMedicamentoSelecionado }) {
+  const [modalMedicamento, setModalMedicamento] = useState(null);
+
+  const medicamentos = [
+    {
+      nome: "Losartana 50mg",
+      retirada: "10/04/2026 às 08:30",
+      unidade: "Farmácia Popular - Centro",
+      status: "Disponível para retirada",
+    },
+    {
+      nome: "Dipirona 500mg",
+      retirada: "12/04/2026 às 10:00",
+      unidade: "UBS Vila Madalena",
+      status: "Aguardando confirmação",
+    },
+  ];
+
+  return (
+    <>
+      <Header title="Farmácia" />
+
+      <main className="screen farmaciaScreen">
+        <button className="backBtn" onClick={() => setPage("farmacia")}>
+          ← Voltar para Farmácia
+        </button>
+
+        <h3 className="sectionTitle">Meus Medicamentos</h3>
+
+        <section className="medicineList">
+          {medicamentos.map((medicamento) => (
+            <article className="medicineCard" key={medicamento.nome}>
+              <div className="medicineIcon">💊</div>
+
+              <div className="medicineContent">
+                <h3>{medicamento.nome}</h3>
+                <p>{medicamento.status}</p>
+
+                <p>
+                  <strong>Retirada:</strong> {medicamento.retirada}
+                </p>
+
+                <p>
+                  <strong>Unidade:</strong> {medicamento.unidade}
+                </p>
+
+                <button onClick={() => setModalMedicamento(medicamento)}>
+                  Ver detalhes
+                </button>
+              </div>
+            </article>
+          ))}
+        </section>
+
+        {modalMedicamento && (
+          <div className="modalOverlay">
+            <section className="medicineModal">
+              <button
+                className="closeModal"
+                onClick={() => setModalMedicamento(null)}
+              >
+                ×
+              </button>
+
+              <h3>{modalMedicamento.nome}</h3>
+
+              <p>
+                <strong>Status:</strong> {modalMedicamento.status}
+              </p>
+
+              <p>
+                <strong>Data de retirada:</strong> {modalMedicamento.retirada}
+              </p>
+
+              <p>
+                <strong>Unidade:</strong> {modalMedicamento.unidade}
+              </p>
+
+              <p>
+                <strong>Dosagem:</strong> 1 comprimido a cada 12 horas
+              </p>
+
+              <p>
+                <strong>Duração:</strong> Uso contínuo
+              </p>
+
+              <button
+                className="primaryBtn"
+                onClick={() => {
+                  setMedicamentoSelecionado(modalMedicamento);
+                  setPage("agendarRetirada");
+                }}
+              >
+                Solicitar Retirada
+              </button>
+            </section>
+          </div>
+        )}
+
+        <BottomNav setPage={setPage} active="farmacia" />
+      </main>
+    </>
+  );
+}
+
+function AgendarRetirada({
+  setPage,
+  medicamentoSelecionado,
+  setRetiradaMedicamento,
+}) {
+  const [dataSelecionada, setDataSelecionada] = useState("");
+  const [erro, setErro] = useState("");
+
+  const datas = ["10/04", "11/04", "12/04", "13/04", "14/04"];
+
+  function confirmarRetirada() {
+    if (!dataSelecionada) {
+      setErro("Selecione uma data para retirada.");
+      return;
+    }
+
+    const retirada = {
+      medicamento: medicamentoSelecionado?.nome,
+      data: dataSelecionada,
+      unidade: medicamentoSelecionado?.unidade,
+    };
+
+    localStorage.setItem("clicksusRetirada", JSON.stringify(retirada));
+    setRetiradaMedicamento(retirada);
+    setPage("sucessoRetirada");
+  }
+
+  return (
+    <>
+      <Header title="FARMÁCIA" />
+
+      <main className="screen farmaciaScreen">
+        <button className="backBtn" onClick={() => setPage("medicamentos")}>
+          ← Voltar para medicamentos
+        </button>
+
+        <section className="appointmentBox">
+          <h3>Escolha a data de retirada</h3>
+
+          <p>
+            <strong>Medicamento:</strong> {medicamentoSelecionado?.nome}
+          </p>
+
+          <div className="optionGrid">
+            {datas.map((data) => (
+              <button
+                key={data}
+                className={dataSelecionada === data ? "selectedOption" : ""}
+                onClick={() => setDataSelecionada(data)}
+              >
+                {data}
+              </button>
+            ))}
+          </div>
+
+          {erro && <p className="erro">{erro}</p>}
+
+          <button className="primaryBtn" onClick={confirmarRetirada}>
+            Confirmar Retirada
+          </button>
+        </section>
+
+        <BottomNav setPage={setPage} active="farmacia" />
+      </main>
+    </>
+  );
+}
+
+function SucessoRetirada({ setPage, retiradaMedicamento }) {
+  return (
+    <>
+      <Header title="FARMÁCIA" />
+
+      <main className="screen farmaciaScreen">
+        <section className="card successCard">
+          <CheckCircle size={145} color="#00a6ac" />
+
+          <h3>Retirada Confirmada!</h3>
+
+          <p>
+            Seu medicamento <strong>{retiradaMedicamento?.medicamento}</strong>{" "}
+            estará disponível para retirada em:
+          </p>
+
+          <p>
+            <strong>{retiradaMedicamento?.data}</strong>
+          </p>
+
+          <p>{retiradaMedicamento?.unidade}</p>
+
+          <button className="primaryBtn" onClick={() => setPage("farmacia")}>
+            Voltar à Farmácia
+          </button>
+        </section>
+
+        <BottomNav setPage={setPage} active="farmacia" />
+      </main>
+    </>
+  );
+}
+
+function UnidadesFarmacia({ setPage }) {
+  const unidades = [
+    {
+      nome: "Farmácia Popular - Centro",
+      endereco: "Rua das Flores, 120 - Centro",
+      horario: "Seg a Sex: 08:00 às 17:00",
+      distancia: "1,2 km",
+    },
+    {
+      nome: "UBS Vila Madalena",
+      endereco: "Av. Saúde, 455 - Vila Madalena",
+      horario: "Seg a Sex: 07:00 às 18:00",
+      distancia: "2,4 km",
+    },
+    {
+      nome: "Farmácia SUS - Butantã",
+      endereco: "Rua Esperança, 88 - Butantã",
+      horario: "Seg a Sáb: 08:00 às 16:00",
+      distancia: "3,1 km",
+    },
+  ];
+
+  return (
+    <>
+      <Header title="FARMÁCIA" />
+
+      <main className="screen farmaciaScreen">
+        <button className="backBtn" onClick={() => setPage("farmacia")}>
+          ← Voltar para Farmácia
+        </button>
+
+        <h3 className="sectionTitle">Unidades de Farmácia</h3>
+
+        <section className="clinicList">
+          {unidades.map((unidade) => (
+            <article className="clinicCard" key={unidade.nome}>
+              <div className="clinicImage">🏥</div>
+
+              <div className="clinicInfo">
+                <h3>{unidade.nome}</h3>
+                <p>📍 {unidade.endereco}</p>
+                <p>🕘 {unidade.horario}</p>
+                <p>Distância: {unidade.distancia}</p>
+              </div>
+            </article>
+          ))}
+        </section>
+
+        <BottomNav setPage={setPage} active="farmacia" />
+      </main>
+    </>
+  );
+}
+
+function Receitas({ setPage }) {
+  const [nomeMedico, setNomeMedico] = useState("");
+  const [arquivo, setArquivo] = useState("");
+  const [erro, setErro] = useState("");
+
+  function enviarReceita() {
+    if (!nomeMedico || !arquivo) {
+      setErro("Informe o nome do médico e selecione um arquivo.");
+      return;
+    }
+
+    setErro("");
+    alert("Receita enviada com sucesso!");
+    setPage("farmacia");
+  }
+
+  return (
+    <>
+      <Header title="FARMÁCIA" />
+
+      <main className="screen farmaciaScreen">
+        <button className="backBtn" onClick={() => setPage("farmacia")}>
+          ← Voltar para Farmácia
+        </button>
+
+        <section className="appointmentBox">
+          <h3>Enviar Receita</h3>
+
+          <label>Nome do médico *</label>
+          <input
+            value={nomeMedico}
+            onChange={(e) => setNomeMedico(e.target.value)}
+            placeholder="Dr. Ramon"
+          />
+
+          <label>Arquivo da receita *</label>
+          <input
+            type="file"
+            onChange={(e) => setArquivo(e.target.files[0]?.name || "")}
+          />
+
+          {erro && <p className="erro">{erro}</p>}
+
+          <button className="primaryBtn" onClick={enviarReceita}>
+            Enviar
+          </button>
+        </section>
+
+        <BottomNav setPage={setPage} active="farmacia" />
+      </main>
+    </>
+  );
+}
+
+function EntregaCasa({ setPage }) {
+  const [cep, setCep] = useState("");
+  const [resultado, setResultado] = useState("");
+  const [erro, setErro] = useState("");
+
+  function verificarEntrega() {
+    if (cep.length < 9) {
+      setErro("Digite um CEP válido.");
+      setResultado("");
+      return;
+    }
+
+    setErro("");
+    setResultado("Entrega disponível para sua região.");
+  }
+
+  return (
+    <>
+      <Header title="FARMÁCIA" />
+
+      <main className="screen farmaciaScreen">
+        <button className="backBtn" onClick={() => setPage("farmacia")}>
+          ← Voltar para Farmácia
+        </button>
+
+        <section className="appointmentBox">
+          <h3>Entrega em Casa</h3>
+
+          <p>Verifique se há disponibilidade de entrega para sua região.</p>
+
+          <label>CEP *</label>
+          <input
+            type="text"
+            value={cep}
+            onChange={(e) => {
+              const valorFormatado = formatCEP(e.target.value);
+              setCep(valorFormatado);
+            }}
+            placeholder="00000-000"
+            maxLength={9}
+          />
+
+          {erro && <p className="erro">{erro}</p>}
+
+          {resultado && <p className="seccessMessage">{resultado}</p>}
+
+          <button className="primaryBtn" onClick={verificarEntrega}>
+            Verificar
+          </button>
+        </section>
+
+        <BottomNav setPage={setPage} active="farmacia" />
+      </main>
+    </>
+  );
+}
+
+function Vacinas({ setPage, setVacinaSelecionada }) {
+  const vacinas = [
+    {
+      nome: "COVID-19",
+      descricao: "Vacina contra coronavírus.",
+      status: "Disponível",
+    },
+    {
+      nome: "Influenza",
+      descricao: "Vacina contra gripe sazonal.",
+      status: "Disponível",
+    },
+    {
+      nome: "Hepatite B",
+      descricao: "Prevenção contra hepatite B.",
+      status: "Disponível",
+    },
+    {
+      nome: "Febre Amarela",
+      descricao: "Proteção contra febre amarela.",
+      status: "Disponível",
+    },
+  ];
+
+  return (
+    <>
+      <Header title="VACINAS" />
+
+      <main className="screen consultasScreen">
+        <h3 className="sectionTitle">Agendar Vacina</h3>
+
+        <section className="vaccineList">
+          {vacinas.map((vacina) => (
+            <article className="vaccineCard" key={vacina.nome}>
+              <div className="vaccineIcon">💉</div>
+
+              <div className="vaccineContent">
+                <h3>{vacina.nome}</h3>
+                <p>{vacina.descricao}</p>
+                <span>{vacina.status}</span>
+
+                <button
+                  onClick={() => {
+                    setVacinaSelecionada(vacina);
+                    setPage("unidadesVacina");
+                  }}
+                >
+                  Agendar Vacina
+                </button>
+              </div>
+            </article>
+          ))}
+        </section>
+
+        <BottomNav setPage={setPage} active="vacinas" />
+      </main>
+    </>
+  );
+}
+
+function UnidadesVacina({
+  setPage,
+  vacinaSelecionada,
+  setUnidadeVacinaSelecionada,
+}) {
+  const unidades = [
+    {
+      nome: "UBS Centro",
+      endereco: "Rua das Flores, 120 - Centro",
+      horario: "Seg a Sex: 08:00 às 17:00",
+      distancia: "1,2 km",
+    },
+    {
+      nome: "UBS Vila Madalena",
+      endereco: "Av. Saúde, 455 - Vila Madalena",
+      horario: "Seg a Sex: 07:00 às 18:00",
+      distancia: "2,4 km",
+    },
+    {
+      nome: "Posto de Vacinação Butantã",
+      endereco: "Rua Esperança, 88 - Butantã",
+      horario: "Seg a Sáb: 08:00 às 16:00",
+      distancia: "3,1 km",
+    },
+  ];
+
+  return (
+    <>
+      <Header title="VACINAS" />
+
+      <main className="screen consultasScreen">
+        <button className="backBtn" onClick={() => setPage("vacinas")}>
+          ← Voltar para vacinas
+        </button>
+
+        <h3 className="sectionTitle">
+          Unidades para {vacinaSelecionada?.nome}
+        </h3>
+
+        <section className="clinicList">
+          {unidades.map((unidade) => (
+            <article className="clinicCard" key={unidade.nome}>
+              <div className="clinicImage">🏥</div>
+
+              <div className="clinicInfo">
+                <h3>{unidade.nome}</h3>
+                <p>📍 {unidade.endereco}</p>
+                <p>🕘 {unidade.horario}</p>
+                <p>Distância: {unidade.distancia}</p>
+
+                <button
+                  onClick={() => {
+                    setUnidadeVacinaSelecionada(unidade);
+                    setPage("agendarVacina");
+                  }}
+                >
+                  Escolher Unidade
+                </button>
+              </div>
+            </article>
+          ))}
+        </section>
+
+        <BottomNav setPage={setPage} active="vacinas" />
+      </main>
+    </>
+  );
+}
+
+function AgendarVacina({
+  setPage,
+  vacinaSelecionada,
+  unidadeVacinaSelecionada,
+  setVacinaAgendada,
+}) {
+  const [dataSelecionada, setDataSelecionada] = useState("");
+  const [horarioSelecionado, setHorarioSelecionado] = useState("");
+  const [erro, setErro] = useState("");
+
+  const datas = ["20/04", "21/04", "22/04", "23/04", "24/04"];
+  const horarios = ["08:00", "09:30", "10:00", "13:30", "15:00"];
+
+  function confirmarAgendamento() {
+    if (!dataSelecionada || !horarioSelecionado) {
+      setErro("Selecione data e horário.");
+      return;
+    }
+
+    const novaVacina = {
+      vacina: vacinaSelecionada?.nome,
+      unidade: unidadeVacinaSelecionada?.nome,
+      endereco: unidadeVacinaSelecionada?.endereco,
+      data: dataSelecionada,
+      horario: horarioSelecionado,
+      status: "Agendada",
+    };
+
+    localStorage.setItem("clicksusVacina", JSON.stringify(novaVacina));
+    setVacinaAgendada(novaVacina);
+    setPage("sucessoVacina");
+  }
+
+  return (
+    <>
+      <Header title="VACINAS" />
+
+      <main className="screen consultasScreen">
+        <button className="backBtn" onClick={() => setPage("unidadesVacina")}>
+          ← Voltar para unidades
+        </button>
+
+        <section className="appointmentBox">
+          <h3>Agendar Vacinação</h3>
+
+          <p>
+            <strong>Vacina:</strong> {vacinaSelecionada?.nome}
+          </p>
+
+          <p>
+            <strong>Unidade:</strong> {unidadeVacinaSelecionada?.nome}
+          </p>
+
+          <h4>Data</h4>
+
+          <div className="optionGrid">
+            {datas.map((data) => (
+              <button
+                key={data}
+                className={dataSelecionada === data ? "selectedOption" : ""}
+                onClick={() => setDataSelecionada(data)}
+              >
+                {data}
+              </button>
+            ))}
+          </div>
+
+          <h4>Horário</h4>
+
+          <div className="optionGrid">
+            {horarios.map((horario) => (
+              <button
+                key={horario}
+                className={
+                  horarioSelecionado === horario ? "selectedOption" : ""
+                }
+                onClick={() => setHorarioSelecionado(horario)}
+              >
+                {horario}
+              </button>
+            ))}
+          </div>
+
+          {erro && <p className="erro">{erro}</p>}
+
+          <button className="primaryBtn" onClick={confirmarAgendamento}>
+            Confirmar Agendamento
+          </button>
+        </section>
+
+        <BottomNav setPage={setPage} active="vacinas" />
+      </main>
+    </>
+  );
+}
+
+function SucessoVacina({ setPage, vacinaAgendada }) {
+  return (
+    <>
+      <Header title="VACINAS" />
+
+      <main className="screen consultasScreen">
+        <section className="card successCard">
+          <CheckCircle size={145} color="#00a6ac" />
+
+          <h3>Vacina Agendada!</h3>
+
+          <p>
+            Sua vacina <strong>{vacinaAgendada?.vacina}</strong> foi agendada
+            com sucesso.
+          </p>
+
+          <p>
+            <strong>Unidade:</strong> {vacinaAgendada?.unidade}
+          </p>
+
+          <p>
+            <strong>Data:</strong> {vacinaAgendada?.data} às{" "}
+            {vacinaAgendada?.horario}
+          </p>
+
+          <button className="primaryBtn" onClick={() => setPage("home")}>
+            Início
+          </button>
+
+          <button className="linkBtn" onClick={() => setPage("minhasVacinas")}>
+            Ver Vacinas
+          </button>
+        </section>
+
+        <BottomNav setPage={setPage} active="vacinas" />
+      </main>
+    </>
+  );
+}
+
+function MinhasVacinas({ setPage }) {
+  const vacina = JSON.parse(localStorage.getItem("clicksusVacina"));
+
+  return (
+    <>
+      <Header title="VACINAS" />
+
+      <main className="screen consultasScreen">
+        <button className="backBtn" onClick={() => setPage("vacinas")}>
+          ← Voltar para Vacinas
+        </button>
+
+        <h3 className="sectionTitle">Minhas Vacinas</h3>
+
+        {vacina ? (
+          <article className="myAppointmentCard">
+            <div className="appointmentDate">
+              <strong>{vacina.data}</strong>
+              <span>{vacina.horario}</span>
+            </div>
+
+            <div>
+              <h3>{vacina.vacina}</h3>
+              <p>{vacina.unidade}</p>
+              <p>Status: {vacina.status}</p>
+            </div>
+          </article>
+        ) : (
+          <section className="appointmentBox">
+            <p>Nenhuma vacina agendada no momento.</p>
+
+            <button className="primaryBtn" onClick={() => setPage("vacinas")}>
+              Agendar
+            </button>
+          </section>
+        )}
+
+        <BottomNav setPage={setPage} active="vacinas" />
       </main>
     </>
   );

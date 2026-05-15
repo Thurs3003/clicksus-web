@@ -77,6 +77,7 @@ button {
   width: 100%;
   max-width: 720px;
   margin: 0 auto;
+  padding-top: 28px;
 }
 
 .card {
@@ -273,6 +274,7 @@ input:focus {
 }
 
 .homeScreen {
+  padding-top: 28px;
   padding-bottom: 105px;
 }
 
@@ -1327,3 +1329,308 @@ input:focus {
   margin-left: auto;
   margin-right: auto;
 }
+
+.consultaTabs {
+  position: relative;
+  width: fit-content;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  background: #f1f1f1;
+  border-radius: 999px;
+  padding: 4px;
+  gap: 0;
+  overflow: hidden;
+}
+
+.consultaTabs .tabButton {
+  position: relative;
+  z-index: 2;
+  border: none;
+  background: transparent;
+  padding: 10px 18px;
+  border-radius: 999px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #777;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+
+
+.tabIndicator {
+  position: absolute;
+  z-index: 1;
+  top: 4px;
+  left: 4px;
+  width: calc((100% - 8px) / 3);
+  height: calc(100% - 8px);
+  border-radius: 999px;
+  background: #a7eeee;
+  transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ===== PAGE TRANSITIONS ===== */
+@keyframes pageEnter {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.screen { animation: pageEnter 0.32s ease; }
+.activeText { color: #008d96 !important; }
+
+/* ===== SPINNER ===== */
+.spinnerOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.88);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 20000;
+  gap: 20px;
+  animation: pageEnter 0.2s ease;
+}
+.spinner {
+  width: 64px;
+  height: 64px;
+  border: 6px solid #d7eeee;
+  border-top-color: #00a6ac;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+.spinnerOverlay p { color: #008d96; font-size: 22px; font-weight: bold; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ===== DEMO BUTTON ===== */
+.demoBtn {
+  width: 82%;
+  min-height: 52px;
+  border: 2.5px dashed #55d1d1;
+  border-radius: 35px;
+  background: #f7ffff;
+  color: #008d96;
+  font-size: 18px;
+  font-weight: bold;
+  margin: 8px auto;
+  display: block;
+  cursor: pointer;
+}
+.demoBtn:hover { background: #e5fbff; }
+
+/* ===== CARTEIRINHA ===== */
+.carteiraWrapper { padding: 4px 0; }
+.carteiraCard {
+  background: linear-gradient(135deg, #00a6ac, #3dc8c8);
+  border-radius: 24px;
+  padding: 32px;
+  color: white;
+  box-shadow: 8px 8px 0 rgba(0,0,0,0.12);
+  margin-bottom: 24px;
+  position: relative;
+  overflow: hidden;
+}
+.carteiraCard::before {
+  content: "✚";
+  position: absolute;
+  right: -20px;
+  bottom: -30px;
+  font-size: 160px;
+  opacity: 0.08;
+  line-height: 1;
+}
+.carteiraLogo {
+  font-size: 13px;
+  font-weight: bold;
+  opacity: 0.8;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+.carteiraName { font-size: clamp(24px, 6vw, 36px); font-weight: bold; margin-bottom: 6px; }
+.carteiraInfo {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 18px;
+}
+.carteiraField label { display: block; font-size: 12px; opacity: 0.75; margin: 0; color: white; }
+.carteiraField strong { font-size: 17px; }
+.tipoSanguineo {
+  position: absolute;
+  top: 28px;
+  right: 32px;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.18);
+  border: 3px solid rgba(255,255,255,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  font-weight: bold;
+}
+.carteiraVaccinesSection {
+  background: white;
+  border-radius: 24px;
+  padding: 24px;
+  box-shadow: 5px 5px 0 #d7eeee;
+  border: 2px solid #e2e2e2;
+}
+.carteiraVaccinesSection h3 { color: #008d96; font-size: 22px; margin: 0 0 16px; }
+.vaccineEntry {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+.vaccineEntry:last-child { border-bottom: none; }
+.vaccineDot {
+  width: 14px; height: 14px; border-radius: 50%;
+  background: #00a6ac; flex-shrink: 0;
+}
+.vaccineEntryInfo strong { display: block; color: #222; font-size: 16px; }
+.vaccineEntryInfo span { color: #777; font-size: 14px; }
+
+/* ===== NOTIFICATIONS ===== */
+.notifList { display: flex; flex-direction: column; gap: 16px; }
+.notifCard {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  background: white;
+  border: 2px solid #e8e8e8;
+  border-radius: 22px;
+  padding: 18px;
+  box-shadow: 4px 4px 0 #d7eeee;
+}
+.notifCard.unread { border-left: 5px solid #00a6ac; background: #f7fffe; }
+.notifIcon {
+  width: 48px; height: 48px; border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px; flex-shrink: 0;
+}
+.notifIcon.success { background: #e0faf5; }
+.notifIcon.info    { background: #e8f4ff; }
+.notifIcon.warning { background: #fff8e0; }
+.notifContent strong { display: block; color: #008d96; font-size: 17px; margin-bottom: 4px; }
+.notifContent p { margin: 0 0 6px; color: #444; font-size: 15px; }
+.notifTime { font-size: 13px; color: #999; }
+.emptyNotif { text-align: center; padding: 60px 24px; color: #aaa; font-size: 18px; }
+.notifScreen { padding-bottom: 40px; }
+
+/* ===== SOBRE CLICKSUS ===== */
+.sobreHero {
+  background: linear-gradient(135deg, #55d1d1, #00a6ac);
+  border-radius: 28px;
+  padding: 40px 28px;
+  color: white;
+  text-align: center;
+  box-shadow: 6px 6px 0 #d7eeee;
+  margin-bottom: 24px;
+}
+.sobreHero h2 { font-size: clamp(30px, 8vw, 48px); font-style: italic; margin: 10px 0 8px; }
+.sobreHero p { font-size: 18px; opacity: 0.9; margin: 0; }
+.sobreLogo { font-size: 60px; margin-bottom: 6px; }
+.sobreSection {
+  background: white;
+  border-radius: 24px;
+  padding: 24px;
+  box-shadow: 5px 5px 0 #d7eeee;
+  border: 2px solid #e2e2e2;
+  margin-bottom: 20px;
+}
+.sobreSection h3 { color: #008d96; font-size: 22px; margin: 0 0 16px; }
+.sobreSection p { color: #444; font-size: 16px; line-height: 1.6; margin: 0 0 10px; }
+.sobreTechList { display: flex; flex-wrap: wrap; gap: 10px; }
+.techChip {
+  background: #e5fbff; color: #008d96;
+  border: 1.5px solid #a7eeee; border-radius: 999px;
+  padding: 6px 16px; font-weight: bold; font-size: 14px;
+}
+.memberCard {
+  display: flex; align-items: center; gap: 14px;
+  padding: 12px 0; border-bottom: 1px solid #f0f0f0;
+}
+.memberCard:last-child { border-bottom: none; }
+.memberAvatar {
+  width: 48px; height: 48px; border-radius: 50%;
+  background: linear-gradient(135deg, #55d1d1, #00a6ac);
+  color: white; display: flex; align-items: center;
+  justify-content: center; font-size: 20px; font-weight: bold; flex-shrink: 0;
+}
+.memberInfo strong { display: block; color: #222; }
+.memberInfo span { color: #777; font-size: 14px; }
+
+/* ===== PROFILE AVATAR ===== */
+.profileAvatarImg {
+  width: 115px; height: 115px; border-radius: 50%;
+  object-fit: cover; border: 3px solid white;
+}
+.profileAvatarInitials {
+  border-radius: 50%; display: flex;
+  align-items: center; justify-content: center;
+  font-size: 42px; font-weight: bold; color: white;
+}
+.photoUploadBox {
+  display: flex; align-items: center; gap: 18px;
+  background: #f7ffff; border: 2px dashed #a7eeee;
+  border-radius: 20px; padding: 18px; margin-bottom: 12px;
+}
+.photoUploadBtn {
+  background: #e5fbff; border: 2px solid #a7eeee;
+  border-radius: 14px; padding: 10px 20px;
+  color: #008d96; font-weight: bold; font-size: 15px;
+  cursor: pointer; white-space: nowrap; flex-shrink: 0;
+}
+
+/* ===== MAP ===== */
+.mapContainer {
+  width: 100%; height: 200px; border-radius: 20px;
+  overflow: hidden; border: 2px solid #e2e2e2;
+  box-shadow: 4px 4px 0 #d7eeee; margin-bottom: 22px;
+}
+.mapContainer iframe { width: 100%; height: 100%; border: none; }
+
+/* ===== HISTÓRICO RETIRADAS ===== */
+.retiradaCard {
+  display: flex; gap: 18px; align-items: center;
+  background: white; border: 2px solid #e2e2e2;
+  border-radius: 22px; padding: 18px;
+  box-shadow: 4px 4px 0 #d7eeee;
+}
+.retiradaDate {
+  min-width: 80px; height: 70px; border-radius: 14px;
+  background: #00a6ac; color: white;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center; font-weight: bold;
+}
+.retiradaDate strong { font-size: 20px; }
+.retiradaInfo h3 { color: #008d96; font-size: 20px; margin: 0 0 4px; }
+.retiradaInfo p { margin: 2px 0; color: #555; font-size: 15px; }
+
+/* ===== VACCINATION BOOK TOGGLE ===== */
+.viewToggle { display: flex; gap: 10px; margin-bottom: 20px; }
+.viewToggle button {
+  flex: 1; padding: 10px; border-radius: 20px;
+  border: 2px solid #a7eeee; background: white;
+  color: #008d96; font-weight: bold; font-size: 15px; cursor: pointer;
+}
+.viewToggle .activeView { background: #55d1d1; color: white; border-color: #00a6ac; }
+.vaccinationBook {
+  background: linear-gradient(135deg, #00a6ac, #3dc8c8);
+  border-radius: 24px; padding: 28px; color: white;
+  box-shadow: 6px 6px 0 rgba(0,0,0,0.1);
+}
+.vaccinationBook h3 { margin: 0 0 4px; font-size: 24px; }
+.bookSubtitle { opacity: 0.8; font-size: 14px; margin-bottom: 20px; display: block; }
+.vaccBookEntry {
+  display: flex; align-items: center; gap: 14px;
+  background: rgba(255,255,255,0.15); border-radius: 14px;
+  padding: 12px 16px; margin-bottom: 10px;
+}
+.vaccBookIcon { font-size: 24px; }
+.vaccBookName { font-weight: bold; font-size: 17px; }
+.vaccBookDate { font-size: 13px; opacity: 0.8; }

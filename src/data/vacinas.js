@@ -1,0 +1,58 @@
+export const vacinas = [
+  {
+    nome: "COVID-19",
+    descricao: "Proteção contra o coronavírus SARS-CoV-2. Reforço anual recomendado.",
+    status: "Disponível",
+    dose: "Dose de reforço anual",
+    publico: "A partir de 5 anos",
+  },
+  {
+    nome: "Influenza (Gripe)",
+    descricao: "Vacina contra os vírus influenza sazonais. Formulação atualizada anualmente.",
+    status: "Disponível",
+    dose: "Dose única anual",
+    publico: "Grupos prioritários e população geral",
+  },
+  {
+    nome: "Hepatite B",
+    descricao: "Prevenção da infecção pelo vírus da hepatite B e suas complicações.",
+    status: "Disponível",
+    dose: "3 doses: 0, 1 e 6 meses",
+    publico: "Todas as idades",
+  },
+  {
+    nome: "Febre Amarela",
+    descricao: "Proteção contra o vírus da febre amarela. Dose única com validade vitalícia.",
+    status: "Disponível",
+    dose: "Dose única (válida para sempre)",
+    publico: "A partir de 9 meses",
+  },
+  {
+    nome: "SCR – Sarampo, Caxumba e Rubéola",
+    descricao: "Vacina tríplice viral que previne sarampo, caxumba e rubéola.",
+    status: "Disponível",
+    dose: "2 doses",
+    publico: "Crianças e adultos não vacinados",
+  },
+  {
+    nome: "Varicela (Catapora)",
+    descricao: "Prevenção da varicela e redução de complicações graves.",
+    status: "Disponível",
+    dose: "2 doses",
+    publico: "Crianças de 1 a 15 anos",
+  },
+  {
+    nome: "HPV",
+    descricao: "Proteção contra o papilomavírus humano, prevenindo cânceres associados.",
+    status: "Disponível",
+    dose: "2 doses: 0 e 6 meses",
+    publico: "9 a 14 anos",
+  },
+  {
+    nome: "Pneumocócica 23-valente",
+    descricao: "Proteção contra pneumonia e infecções por Streptococcus pneumoniae.",
+    status: "Disponível",
+    dose: "1 dose (adultos 60+)",
+    publico: "Crianças menores de 2 anos e adultos acima de 60 anos",
+  },
+];
